@@ -20,7 +20,7 @@ Alternatively, you can run the application locally without Docker Compose. In th
 
 Regardless of the method you choose, make sure all necessary environment variables are set. You can define these variables in a .env file or directly in the docker-compose.yml file if using Docker Compose.
 
-#### Install PHP dependencies using Composer:
+## Install PHP dependencies using Composer and start application:
 
 ```bash
 composer install

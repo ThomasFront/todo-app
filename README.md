@@ -16,7 +16,7 @@ This will start all services defined in the docker-compose.yml file, including a
 
 Alternatively, you can run the application locally without Docker Compose. In this case, ensure you have set up the required dependencies, including the database, and that the environment variables are properly configured.
 
-### Environment Variables
+## Environment Variables
 
 Regardless of the method you choose, make sure all necessary environment variables are set. You can define these variables in a .env file or directly in the docker-compose.yml file if using Docker Compose.
 

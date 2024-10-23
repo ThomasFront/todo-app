@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Events\TaskChanged;
+use App\Events\TaskCompleted;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
@@ -54,6 +56,10 @@ class TaskService
         $task->is_completed = $isCompleted;
         $task->save();
 
+        if ($isCompleted) {
+            event(new TaskCompleted($task));
+        }
+
         return $task;
     }
 
@@ -66,8 +72,27 @@ class TaskService
      */
     public function updateTask(UpdateTaskRequest $request, Task $task): Task
     {
+        $originalValues = $task->getOriginal();
+
         $validatedData = $request->validated();
         $task->update($validatedData);
+
+        $newValues = $task->getAttributes();
+
+        $changes = [];
+
+        foreach ($newValues as $field => $newValue) {
+            if ($newValue !== $originalValues[$field]) {
+                $changes[$field] = [
+                    'before' => $originalValues[$field],
+                    'after' => $newValue,
+                ];
+            }
+        }
+
+        if (!empty($changes)) {
+            event(new TaskChanged($task, $changes));
+        }
 
         return $task;
     }
